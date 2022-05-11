@@ -1,4 +1,5 @@
 ## python version == 3.8
+## django == 3.2
 
 ## 프로젝트 목표
 - 클론 대상

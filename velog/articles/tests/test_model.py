@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from django.test import TestCase
+
 
 from comments.models import Comment
 from ..models import Article
@@ -8,9 +11,11 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class ArticleTestCase(TestCase):
-    def setUp(self):
 
+class ArticleTestCase(TestCase):
+
+    def setUp(self):
+        # freezer 적용해서 created 시간 체크하자.
         self.user = User.objects.create(username='test')
         self.profile = UserProfile.objects.create(
             user=self.user,
@@ -44,3 +49,4 @@ class ArticleTestCase(TestCase):
         self.article.delete()
         self.assertFalse(Article.objects.filter(pk=article_pk).exists())
         self.assertFalse(Comment.objects.filter(pk=comment_pk).exists())
+

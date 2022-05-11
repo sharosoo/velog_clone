@@ -1,0 +1,78 @@
+from django.db import models
+
+from django_extensions.db.models import TimeStampedModel
+
+from accounts.models import UserProfile
+from series.models import Series
+from comments.models import Comment
+
+
+class Article(TimeStampedModel):
+    """
+    게시물을 표현하기 위한 모델
+    """
+
+    profile = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        related_name='article'
+    )
+
+    title = models.CharField(
+        max_length=60
+    )
+
+    # URL source에서 article의 주소를 사람이 읽을 수 있는 형태로 고치기 위해 slugify를 이용한다.
+    # frontend 에서 form에 입력된 title을 자동 변환(영어,숫자,-로 구성, 공백 없음)하여 slug도 함께 제출하는 것을 가정했다.
+    # Todo: slug field를 blank=True로 고치고 backend에서 slug가 blank인 경우 slug를 자동 변환해주는 로직을 추가하자.
+    # Todo: Title이 영어나 숫자로 구성되지 않은 경우 번역하여 slug를 저장하자.(URL은 ASCII 코드로 전송이 가능하다)
+    slug = models.SlugField(
+        max_length=60,
+        # blank=True,
+        # default = slugify function()
+    )
+
+    # Todo: editor 구현을 위해 markdownx 필드로 변경 필요
+    # 구현을 쉽게 하기 위해 우선은 TextField로 두자. markdownx필드는 TextField기반이므로 변경이 쉬울 것으로 예상된다.
+    content = models.TextField()
+
+    # view_cnt는 항상 0이상
+    # 사용자가 입력하면 안됨 readonly
+    view_cnt = models.PositiveIntegerField(
+        blank=True,
+        default=0
+    )
+
+    # series_order를 통해 series내의 게시물 순서를 결정한다. (0: series 아님, 1~ : 각자의 series에서 series order)
+    series_order = models.PositiveIntegerField(
+        blank=True,
+        default=0
+    )
+
+    # series가 삭제된다 하더라도 그 하위에 있던 게시물은 삭제가 되면 안된다.
+    series = models.ForeignKey(
+        Series,
+        on_delete=models.SET_NULL,
+        related_name='article',
+        blank=True,
+        null=True
+    )
+
+    # article에 달린 comment(트리구조)의 root를 가리킨다.
+    comment = models.ForeignKey(
+        Comment,
+        # 게시물이 삭제되기 전에 root 댓글(가짜 댓글)이 삭제될 일은 없다.
+        # 그래도 article이 삭제 되면 위험하니 SET_NULL로 하자.
+        on_delete=models.SET_NULL,
+        related_name='article',
+        editable=False,
+        blank=True,
+        null=True
+    )
+
+    def save(self, **kwargs):
+        # article에 root comment를 생성한다.
+        # 수정할때마다 변경이 일어나므로 로직을 따로 빼도록 해보자.
+        if not self.comment:
+            self.comment = Comment.add_root(profile=self.profile, content='')
+        super().save(**kwargs)

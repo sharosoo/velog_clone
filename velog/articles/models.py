@@ -70,9 +70,15 @@ class Article(TimeStampedModel):
         null=True
     )
 
+    # article 모델에서 comment를 관리해야하므로 그다지 좋지 않은 구조인 것 같다.
     def save(self, **kwargs):
         # article에 root comment를 생성한다.
         # 수정할때마다 변경이 일어나므로 로직을 따로 빼도록 해보자.
         if not self.comment:
             self.comment = Comment.add_root(profile=self.profile, content='')
         super().save(**kwargs)
+
+    def delete(self, using=None, keep_parents=False):
+        if self.comment:
+            self.comment.delete()
+        super(Article, self).delete()

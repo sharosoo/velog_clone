@@ -6,6 +6,7 @@ from django_extensions.db.models import TimeStampedModel
 
 from series.models import Series
 from comments.models import Comment
+from recommends.models import RecommendToday, RecommendWeekly, RecommendMonthly
 
 
 class Article(TimeStampedModel):
@@ -127,6 +128,7 @@ class Article(TimeStampedModel):
         self.get_series_order()
 
         super(Article, self).save(**kwargs)
+        self.update_article_recommend()
 
     def delete(self, using=None, keep_parents=False):
         if self.comment:
@@ -146,9 +148,19 @@ class Article(TimeStampedModel):
         elif self.series_order:
             self.series_order = 0
 
-        super(Article, self).save(**kwargs)
+    def update_article_recommend(self):
+        self.update_article_recommend_today()
+        self.update_article_recommend_weekly()
+        self.update_article_recommend_monthly()
 
-    def delete(self, using=None, keep_parents=False):
-        if self.comment:
-            self.comment.delete()
-        super(Article, self).delete()
+    def update_article_recommend_today(self):
+        RecommendToday.assigned_to().update_article_recommend(self)
+
+    def update_article_recommend_weekly(self):
+        RecommendWeekly.assigned_to().update_article_recommend(self)
+
+    def update_article_recommend_monthly(self):
+        RecommendMonthly.assigned_to().update_article_recommend(self)
+
+
+

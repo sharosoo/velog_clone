@@ -28,8 +28,6 @@ class Comment(MP_Node, TimeStampedModel):
     # root 댓글의 수 (= 게시물의 수) = (허용 가능한 char) ** (steplen)이다.
     steplen = 8
 
-    # profile이 삭제되면 그 profile이 작성한 게시물도 없어져야 한다.
-    # Todo: Model Manager로 depth가 2이상인 진짜 comment만 가져오자, field를 추가해서 데이터분석하시는 분들이 읽기 편하게 하자.
     profile = models.ForeignKey(
         UserProfile,
         on_delete=models.CASCADE,

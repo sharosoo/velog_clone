@@ -32,7 +32,8 @@ class Comment(MP_Node, TimeStampedModel):
     # Todo: Model Manager로 depth가 2이상인 진짜 comment만 가져오자, field를 추가해서 데이터분석하시는 분들이 읽기 편하게 하자.
     profile = models.ForeignKey(
         UserProfile,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        verbose_name='댓글 작성자 프로필'
     )
 
     content = models.TextField(

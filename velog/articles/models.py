@@ -1,10 +1,12 @@
 from django.db import models
+from django.db.models import Max
 
 from django_extensions.db.models import TimeStampedModel
 
 from accounts.models import UserProfile
 from series.models import Series
 from comments.models import Comment
+# Todo: field verbose name 한글로 적어주기
 
 
 class Article(TimeStampedModel):
@@ -19,7 +21,7 @@ class Article(TimeStampedModel):
     )
 
     title = models.CharField(
-        max_length=60
+        max_length=60,
     )
 
     # URL source에서 article의 주소를 사람이 읽을 수 있는 형태로 고치기 위해 slugify를 이용한다.
@@ -44,6 +46,7 @@ class Article(TimeStampedModel):
     )
 
     # series_order를 통해 series내의 게시물 순서를 결정한다. (0: series 아님, 1~ : 각자의 series에서 series order)
+    # Todo: 노출순서 설정 더 고민해보기, Manager로 잘 감싸자
     series_order = models.PositiveIntegerField(
         blank=True,
         default=0
@@ -69,6 +72,7 @@ class Article(TimeStampedModel):
         blank=True,
         null=True
     )
+    # TODO: unique constraints - (profile, title)
 
     # article 모델에서 comment를 관리해야하므로 그다지 좋지 않은 구조인 것 같다.
     def save(self, **kwargs):
@@ -76,6 +80,19 @@ class Article(TimeStampedModel):
         # 수정할때마다 변경이 일어나므로 로직을 따로 빼도록 해보자.
         if not self.comment:
             self.comment = Comment.add_root(profile=self.profile, content='')
+
+        if self.series:
+            if not self.series_order:
+                max_order = Series.objects.filter(
+                    pk=self.series
+                ).aggregate(
+                    Max('articles__series_order')
+                )
+                self.series_order = max_order + 1
+
+        elif self.series_order:
+            self.series_order = 0
+
         super().save(**kwargs)
 
     def delete(self, using=None, keep_parents=False):

@@ -47,25 +47,6 @@ class PeriodQuerySet(models.QuerySet):
             time_delta=relativedelta(months=1)
         )
 
-    # Todo: 다른 모델에서 불러오는 것이 바람직, Recommend에서 관리하자
-    def today_cnt(self, article_id=None):
-
-        return self.today(
-            article_id=article_id
-        ).count()
-
-    def weekly_cnt(self, article_id=None):
-
-        return self.weekly(
-            article_id=article_id
-        ).count()
-
-    def monthly_cnt(self, article_id=None):
-
-        return self.monthly(
-            article_id=article_id
-        ).count()
-
 
 class ArticleViewCount(TimeStampedModel):
     article = models.ForeignKey(

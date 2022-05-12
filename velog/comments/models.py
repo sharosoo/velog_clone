@@ -23,7 +23,6 @@ class Comment(MP_Node, TimeStampedModel):
     # 2
     # 2/1, 2/2
     # ...
-    node_order_by = ['created']
     # root 댓글의 수 (= 게시물의 수) = (허용 가능한 char) ** (steplen)이다.
     steplen = 8
 

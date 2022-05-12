@@ -7,6 +7,7 @@ from accounts.models import UserProfile
 
 # 다른 구현방법 parent, children foreignkey
 
+
 class Comment(MP_Node, TimeStampedModel):
     """
     댓글, 대댓글을 관리하기 위한 tree 구조의 댓글 model
@@ -36,4 +37,9 @@ class Comment(MP_Node, TimeStampedModel):
     content = models.TextField(
         blank=True,
         default='empty comment'
+    )
+
+    active = models.BooleanField(
+        blank=True,
+        default=True
     )

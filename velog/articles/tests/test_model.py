@@ -76,6 +76,9 @@ class ArticleTestCase(TestCase):
 
         self.assertEqual(self.article.comment.created, self.expected_time)
 
+    def test_article_생성시_root_comment의_active가_False여야함(self):
+        self.assertFalse(self.article.comment.active)
+
     def test_article_삭제시_root_comment도_삭제됨(self):
         article_pk = self.article.pk
 

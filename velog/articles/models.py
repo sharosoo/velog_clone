@@ -108,7 +108,7 @@ class Article(TimeStampedModel):
 
     def save(self, **kwargs):
         if not self.comment:
-            self.comment = Comment.add_root(profile=self.profile)
+            self.comment = Comment.add_root(profile=self.profile, active=False)
 
         if self.series:
             if not self.series_order:

@@ -83,20 +83,30 @@ class Article(TimeStampedModel):
         verbose_name='댓글'
     )
 
-    # article 모델에서 comment를 관리해야하므로 그다지 좋지 않은 구조인 것 같다.
+    @cached_property
+    def author(self):
+        return self.get_author()
+
+    def get_author(self):
+        return f'{self.profile.nickname}'
+
+    # TODO: unique constraints - (profile, title)?
+
+    def get_max_series_order(self):
+        ret = Article.objects.filter(
+            series=self.series
+        ).aggregate(
+            Max('series_order')
+        )
+        return ret
+
     def save(self, **kwargs):
-        # article에 root comment를 생성한다.
-        # 수정할때마다 변경이 일어나므로 로직을 따로 빼도록 해보자.
         if not self.comment:
             self.comment = Comment.add_root(profile=self.profile, content='')
 
         if self.series:
             if not self.series_order:
-                max_order = Series.objects.filter(
-                    pk=self.series
-                ).aggregate(
-                    Max('articles__series_order')
-                )
+                max_order = self.get_max_series_order()
                 self.series_order = max_order + 1
 
         elif self.series_order:

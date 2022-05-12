@@ -1,5 +1,3 @@
-from dateutil.relativedelta import relativedelta
-from django.db import IntegrityError
 from django.test import TestCase
 from django.utils import timezone
 
@@ -11,12 +9,10 @@ from ..models import (
     RecommendMonthly
 )
 from likes.models import Like
-from articles.models import Article
-from accounts.models import UserProfile
 from commons.test import (
     get_profiles,
     get_articles,
-    FROZEN_TIME,
+
     FROZEN_TIME_WEEK_AGO,
     FROZEN_TIME_MONTH_AGO
 )

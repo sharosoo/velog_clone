@@ -6,6 +6,7 @@ from django_extensions.db.models import TimeStampedModel
 from accounts.models import UserProfile
 
 # 다른 구현방법 parent, children foreignkey
+ROOT_NODE_COMMENT = '루트 노드 댓글입니다.'
 
 
 class Comment(MP_Node, TimeStampedModel):
@@ -36,10 +37,12 @@ class Comment(MP_Node, TimeStampedModel):
 
     content = models.TextField(
         blank=True,
-        default='empty comment'
+        default='empty comment',
+        verbose_name='댓글 내용'
     )
 
     active = models.BooleanField(
         blank=True,
-        default=True
+        default=True,
+        verbose_name='댓글 활성 상태'
     )

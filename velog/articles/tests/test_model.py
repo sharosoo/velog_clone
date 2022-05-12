@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from freezegun import freeze_time
 
-from comments.models import Comment
+from comments.models import Comment, ROOT_NODE_COMMENT
 from series.models import Series
 from ..models import Article
 from accounts.models import UserProfile
@@ -73,6 +73,7 @@ class ArticleTestCase(TestCase):
     def test_article_생성시_root_comment도_생성됨(self):
         self.assertTrue(self.article.comment)
         self.assertEqual(self.article.comment.depth, 1)
+        self.assertEqual(self.article.comment.content, ROOT_NODE_COMMENT)
 
         self.assertEqual(self.article.comment.created, self.expected_time)
 

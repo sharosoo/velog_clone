@@ -7,7 +7,6 @@ from django_extensions.db.models import TimeStampedModel
 from accounts.models import UserProfile
 from series.models import Series
 from comments.models import Comment
-# Todo: field verbose name 한글로 적어주기
 
 
 class Article(TimeStampedModel):
@@ -118,7 +117,7 @@ class Article(TimeStampedModel):
         elif self.series_order:
             self.series_order = 0
 
-        super().save(**kwargs)
+        super(Article, self).save(**kwargs)
 
     def delete(self, using=None, keep_parents=False):
         if self.comment:

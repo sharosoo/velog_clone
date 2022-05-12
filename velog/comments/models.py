@@ -46,3 +46,33 @@ class Comment(MP_Node, TimeStampedModel):
         default=True,
         verbose_name='댓글 활성 상태'
     )
+
+    def is_root_comment(self):
+        return bool(self.depth == 1)
+
+    def is_root_comment_exists(self):
+        return Comment.objects.filter(
+            path=self.path[0:self.steplen]
+        ).exists()
+
+    def is_leaf_comment(self):
+        return self.is_leaf()
+
+    def get_parent_comment(self):
+        """
+        :returns: the parent node of the current comment object.
+            Caches the result in the object itself to help in loops.
+        """
+        return self.get_parent()
+
+    def get_ancestors_comment(self):
+        """
+        :returns: A queryset containing the current comment object's ancestors,
+            starting by the root node and descending to the parent.
+        """
+        return self.get_ancestors()
+
+    def get_children_comment(self):
+        """:returns: A queryset of all the comment's children comments"""
+        return self.get_children()
+

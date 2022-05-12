@@ -6,6 +6,7 @@ from django_extensions.db.models import TimeStampedModel
 from accounts.models import UserProfile
 
 # 다른 구현방법 parent, children foreignkey
+REMOVED_COMMENT = '삭제된 댓글입니다.'
 ROOT_NODE_COMMENT = '루트 노드 댓글입니다.'
 
 

@@ -29,6 +29,7 @@ class Article(TimeStampedModel):
     # frontend 에서 form에 입력된 title을 자동 변환(영어,숫자,-로 구성, 공백 없음)하여 slug도 함께 제출하는 것을 가정했다.
     # Todo: slug field를 blank=True로 고치고 backend에서 slug가 blank인 경우 slug를 자동 변환해주는 로직을 추가하자.
     # Todo: Title이 영어나 숫자로 구성되지 않은 경우 번역하여 slug를 저장하자.(URL은 ASCII 코드로 전송이 가능하다)
+    # Todo: title이 겹치는 경우도 slug를 구별되도록 설정하는 것이 좋다.
     slug = models.SlugField(
         max_length=60,
         # blank=True,
@@ -81,14 +82,21 @@ class Article(TimeStampedModel):
         verbose_name='댓글'
     )
 
+    class Meta:
+        # 원하는 article detail url은 /profile_nickname/slug이므로 미리 추가해놓은 제한사항
+        constraints = [
+            models.UniqueConstraint(
+                fields=['profile', 'slug'],
+                name='unique slug for profile'
+            ),
+        ]
+
     @cached_property
     def author(self):
         return self.get_author()
 
     def get_author(self):
         return f'{self.profile.nickname}'
-
-    # TODO: unique constraints - (profile, title)?
 
     def get_max_series_order(self):
         queryset = Article.objects.filter(

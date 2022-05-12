@@ -40,6 +40,7 @@ class TagTestCase(TestCase):
             Tag.objects.create(hashtag='test')
 
     def test_게시물마다_같은_태그는_한번만(self):
-        # with self.assertRaises(IntegrityError): -> IntegrityError 없이 자체적으로 중복 관계는 추가하지 않는 것 같다.
+        # with self.assertRaises(IntegrityError): -> IntegrityError
+        # db transaction 이전에 validation을 거친다 -> 갯수로 카운트한다.
         self.article.tags.add(self.tag)
         self.assertEqual(1, self.article.tags.count())

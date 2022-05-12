@@ -93,16 +93,22 @@ class Article(TimeStampedModel):
     # TODO: unique constraints - (profile, title)?
 
     def get_max_series_order(self):
-        ret = Article.objects.filter(
+        queryset = Article.objects.filter(
             series=self.series
-        ).aggregate(
-            Max('series_order')
         )
+
+        if not queryset.exists():
+            return 0
+
+        ret = queryset.aggregate(
+            Max('series_order')
+        )['series_order__max']
+
         return ret
 
     def save(self, **kwargs):
         if not self.comment:
-            self.comment = Comment.add_root(profile=self.profile, content='')
+            self.comment = Comment.add_root(profile=self.profile)
 
         if self.series:
             if not self.series_order:

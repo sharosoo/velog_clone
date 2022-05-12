@@ -4,7 +4,6 @@ from django.utils.functional import cached_property
 
 from django_extensions.db.models import TimeStampedModel
 
-from accounts.models import UserProfile
 from series.models import Series
 from comments.models import Comment
 
@@ -15,7 +14,7 @@ class Article(TimeStampedModel):
     """
 
     profile = models.ForeignKey(
-        UserProfile,
+        'accounts.UserProfile',
         on_delete=models.CASCADE,
         related_name='article',
         verbose_name='프로필'

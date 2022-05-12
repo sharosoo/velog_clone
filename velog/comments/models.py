@@ -77,3 +77,16 @@ class Comment(MP_Node, TimeStampedModel):
         """:returns: A queryset of all the comment's children comments"""
         return self.get_children()
 
+    def save(self, **kwargs):
+        if not self.active:
+            self.content = REMOVED_COMMENT if self.depth > 1 else ROOT_NODE_COMMENT
+
+        super(Comment, self).save(**kwargs)
+
+    def delete(self):
+        if self.is_root_comment() or self.is_leaf_comment():
+            super(Comment, self).delete()
+
+        else:
+            self.active = False
+            self.save()

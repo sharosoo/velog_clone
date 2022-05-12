@@ -26,7 +26,7 @@
     - JSON Data: `profile_id`, `title`, `slug`, `content`, `tags`, `series_id`
 - `api/article/{int: article_id}/`
   - `GET`
-    - JSON Data: `profile_nickname`, `article_title`, `article_content`, `comments`(in nested json)
+    - JSON Data: `profile_nickname`, `article_title`, `article_content`, `root_comment`, `comments`
       - `comments`: `comment_id`, `profile_id`, `content`, `depth`
   - `PUT`
     - JSON Data: `profile_id`, `title`, `slug`, `content`, `tags`, `series_id`

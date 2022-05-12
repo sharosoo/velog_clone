@@ -1,8 +1,6 @@
 from django.test import TestCase
 
-from freezegun import freeze_time
-
-from ..models import Comment, ROOT_NODE_COMMENT, REMOVED_COMMENT
+from ..models import Comment, REMOVED_COMMENT
 from articles.models import Article
 from accounts.models import UserProfile
 from django.contrib.auth import get_user_model

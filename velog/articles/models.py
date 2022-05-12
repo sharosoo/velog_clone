@@ -124,9 +124,21 @@ class Article(TimeStampedModel):
         return ret
 
     def save(self, **kwargs):
+        self.get_root_comment()
+        self.get_series_order()
+
+        super(Article, self).save(**kwargs)
+
+    def delete(self, using=None, keep_parents=False):
+        if self.comment:
+            self.comment.delete()
+        super(Article, self).delete()
+
+    def get_root_comment(self):
         if not self.comment:
             self.comment = Comment.add_root(profile=self.profile, active=False)
 
+    def get_series_order(self):
         if self.series:
             if not self.series_order:
                 max_order = self.get_max_series_order()

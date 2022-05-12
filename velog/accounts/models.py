@@ -11,15 +11,17 @@ class UserProfile(TimeStampedModel):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         # 계정 삭제시 user를 delete하면 profile도 따라서 없어져야함.
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
 
     nickname = models.CharField(
         max_length=16,
-        unique=True
+        unique=True,
+        verbose_name='닉네임'
     )
 
     desc = models.CharField(
         max_length=150,
-        blank=True
+        blank=True,
+        verbose_name='자기소개'
     )

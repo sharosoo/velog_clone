@@ -9,11 +9,11 @@ class Tag(models.Model):
     """
     hashtag = models.CharField(
         max_length=20,
-        unique=True
+        unique=True,
+        verbose_name='태그명'
     )
     article = models.ManyToManyField(
         Article,
-        related_name='tags'
+        related_name='tags',
+        verbose_name='게시물'
     )
-
-    # uniqueness of hashtag on given article should be checked

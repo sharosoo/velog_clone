@@ -84,13 +84,15 @@ class Like(TimeStampedModel):
 
     profile = models.ForeignKey(
         UserProfile,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        verbose_name='좋아요'
     )
 
     article = models.ForeignKey(
         Article,
         on_delete=models.CASCADE,
-        related_name='like'
+        related_name='like',
+        verbose_name='게시물'
     )
 
     objects = models.Manager()

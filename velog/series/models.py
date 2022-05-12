@@ -11,11 +11,13 @@ class Series(TimeStampedModel):
     UserProfile에 귀속됨
     """
     title = models.CharField(
-        max_length=60
+        max_length=60,
+        verbose_name='시리즈 이름'
     )
 
     profile = models.ForeignKey(
         UserProfile,
         on_delete=models.CASCADE,
-        related_name='series'
+        related_name='series',
+        verbose_name='프로필'
     )

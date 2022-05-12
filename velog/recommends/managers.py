@@ -5,13 +5,9 @@ from articleviews.models import ArticleViewCount
 
 
 class RecommendUpdateBaseManager(models.Manager):
-    def get_queryset(self, article):
-        return super().get_queryset().filter(
-            article=article
-        )
 
     def get_object_or_create(self, article):
-        instances = self.get_queryset(article)
+        instances = self.filter(article=article)
         if instances.exists():
             return instances[0]
 
@@ -19,7 +15,7 @@ class RecommendUpdateBaseManager(models.Manager):
         return instance
 
     def update_article_recommend(self, article):
-        instance = self.get_object_or_create(article)
+        instance = self.get_object_or_create(article=article)
 
         update_value = self.get_article_like_cnt(article) * 5 \
                        + self.get_article_view_cnt(article)
@@ -40,7 +36,7 @@ class RecommendUpdateMonthlyManager(RecommendUpdateBaseManager):
         return Like.period.monthly(article_id=article).count()
 
     def get_article_view_cnt(self, article):
-        return ArticleViewCount.period.monthly_cnt(article_id=article).count()
+        return ArticleViewCount.period.monthly(article_id=article).count()
 
 
 class RecommendUpdateWeeklyManager(RecommendUpdateBaseManager):

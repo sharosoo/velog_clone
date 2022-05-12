@@ -35,14 +35,14 @@ class Recommend(TimeStampedModel):
 
 class RecommendToday(Recommend):
 
-    assigned_to = RecommendUpdateTodayManager
+    assigned_to = RecommendUpdateTodayManager()
 
 
 class RecommendWeekly(Recommend):
 
-    assigned_to = RecommendUpdateWeeklyManager
+    assigned_to = RecommendUpdateWeeklyManager()
 
 
 class RecommendMonthly(Recommend):
 
-    assigned_to = RecommendUpdateMonthlyManager
+    assigned_to = RecommendUpdateMonthlyManager()

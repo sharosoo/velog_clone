@@ -45,6 +45,8 @@ class Article(TimeStampedModel):
 
     # view_cnt는 항상 0이상
     # 사용자가 입력하면 안됨 readonly
+    # ArticleViewCnt 모델에서 조회가 될때마다 1씩 추가해준다.
+    # 꼭 필요한 필드는 아니지만 page마다 빈번하게 조회되는 쿼리이므로 반정규화했다.
     view_cnt = models.PositiveIntegerField(
         blank=True,
         default=0,

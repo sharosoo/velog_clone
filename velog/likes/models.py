@@ -21,9 +21,7 @@ class PeriodQuerySet(models.QuerySet):
         period = time_now - time_delta
 
         if not article_id:
-            return self.filter(
-                Q(created__gte=period)
-            )
+            return self.none()
 
         return self.filter(
             Q(article=article_id) &

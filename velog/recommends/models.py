@@ -3,11 +3,36 @@ from django_extensions.db.models import TimeStampedModel
 
 from likes.models import Like
 from articleviews.models import ArticleViewCount
+from recommends.basemanager import RecommendUpdateBaseManager
+
+
+class RecommendUpdateMonthlyManager(RecommendUpdateBaseManager):
+    def get_article_like_cnt(self, article):
+        return Like.period.monthly_cnt(article_id=article)
+
+    def get_article_view_cnt(self, article):
+        return ArticleViewCount.period.monthly_cnt(article_id=article)
+
+
+class RecommendUpdateWeeklyManager(RecommendUpdateBaseManager):
+    def get_article_like_cnt(self, article):
+        return Like.period.weekly_cnt(article_id=article)
+
+    def get_article_view_cnt(self, article):
+        return ArticleViewCount.period.weekly_cnt(article_id=article)
+
+
+class RecommendUpdateTodayManager(RecommendUpdateBaseManager):
+    def get_article_like_cnt(self, article):
+        return Like.period.today_cnt(article_id=article)
+
+    def get_article_view_cnt(self, article):
+        return ArticleViewCount.period.today_cnt(article_id=article)
 
 
 class Recommend(TimeStampedModel):
 
-    article = models.ForeignKey(
+    article = models.OneToOneField(
         'articles.Article',
         on_delete=models.CASCADE,
     )
@@ -18,41 +43,31 @@ class Recommend(TimeStampedModel):
         verbose_name='추천지수'
     )
 
+    objects = models.Manager()
+    assigned_to = RecommendUpdateBaseManager()
+
+    def get_class_name(self):
+        return self.__class__.__name__
+
     class Meta:
         abstract = True
-
-    def get_recommendation_value(self):
-        raise NotImplementedError
+        indexes = [
+            models.Index(
+                fields=['-recommendation']
+            )
+        ]
 
 
 class RecommendToday(Recommend):
-    def get_recommendation_value(self):
-        return self.get_view_cnt_today() + 5 * self.get_like_today()
 
-    def get_like_today(self):
-        return Like.period.today_cnt(article_id=self.article)
-
-    def get_view_cnt_today(self):
-        return ArticleViewCount.period.today_cnt(article_id=self.article)
+    assigned_to = RecommendUpdateTodayManager()
 
 
 class RecommendWeekly(Recommend):
-    def get_recommendation_value(self):
-        return self.get_view_cnt_weekly() + 5 * self.get_like_weekly()
 
-    def get_like_weekly(self):
-        return Like.period.weekly_cnt(article_id=self.article)
-
-    def get_view_cnt_weekly(self):
-        return ArticleViewCount.period.weekly_cnt(article_id=self.article)
+    assigned_to = RecommendUpdateWeeklyManager()
 
 
 class RecommendMonthly(Recommend):
-    def get_recommendation_value(self):
-        return self.get_view_cnt_monthly() + 5 * self.get_like_monthly()
 
-    def get_like_monthly(self):
-        return Like.period.monthly_cnt(article_id=self.article)
-
-    def get_view_cnt_monthly(self):
-        return ArticleViewCount.period.monthly_cnt(article_id=self.article)
+    assigned_to = RecommendUpdateMonthlyManager()

@@ -51,6 +51,15 @@ class Article(TimeStampedModel):
         verbose_name='조회수'
     )
 
+    # like_cnt는 항상 0이상
+    # Like 모델에서 생성 될때마다 1씩 추가해준다.
+    # 꼭 필요한 필드 아니지만 page마다 빈번하게 조회되는 쿼리이므로 반정규화했다.
+    like_cnt = models.PositiveIntegerField(
+        blank=True,
+        default=0,
+        verbose_name='좋아요수'
+    )
+
     # series_order를 통해 series내의 게시물 순서를 결정한다. (0: series 아님, 1~ : 각자의 series에서 series order)
     # Todo: 노출순서 설정 더 고민해보기, Manager로 잘 감싸자
     series_order = models.PositiveIntegerField(

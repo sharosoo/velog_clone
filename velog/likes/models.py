@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from dateutil.relativedelta import relativedelta
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, F
 from django.utils import timezone
 
 from django_extensions.db.models import TimeStampedModel
@@ -110,3 +110,11 @@ class Like(TimeStampedModel):
                 fields=['article', 'created'], name='article_period_like_idx'
             ),
         ]
+
+    def save(self, **kwargs):
+        self.article.like_cnt = F('like_cnt') + 1
+        self.article.save()
+
+        self.article.refresh_from_db()
+
+        super(Like, self).save(**kwargs)

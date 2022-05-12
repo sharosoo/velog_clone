@@ -7,12 +7,8 @@ from django.utils import timezone
 
 from django_extensions.db.models import TimeStampedModel
 
-from accounts.models import UserProfile
-from articles.models import Article
-
 
 class PeriodQuerySet(models.QuerySet):
-
     def _period_base(self, article_id=None, time_delta=None):
         if not time_delta:
             time_delta = timedelta(0)
@@ -81,13 +77,13 @@ class Like(TimeStampedModel):
     # unlike하면 어차피 DB에서 삭제할거라서 굳이 modified 필드가 필요 없기는 하다.
 
     profile = models.ForeignKey(
-        UserProfile,
+        'accounts.UserProfile',
         on_delete=models.CASCADE,
         verbose_name='좋아요'
     )
 
     article = models.ForeignKey(
-        Article,
+        'articles.Article',
         on_delete=models.CASCADE,
         related_name='like',
         verbose_name='게시물'

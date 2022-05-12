@@ -7,8 +7,6 @@ from django.utils import timezone
 
 from django_extensions.db.models import TimeStampedModel
 
-from articles.models import Article
-
 
 # Todo: DRY 원칙에 위배됨 like의 PeriodQuerySet과 함께 쓸 수 있도록 리팩토링하자.
 class PeriodQuerySet(models.QuerySet):
@@ -71,7 +69,7 @@ class PeriodQuerySet(models.QuerySet):
 
 class ArticleViewCount(TimeStampedModel):
     article = models.ForeignKey(
-        Article,
+        'articles.Article',
         on_delete=models.CASCADE,
         related_name='articleview',
         verbose_name='게시물조회내역'

@@ -5,6 +5,7 @@ from django_extensions.db.models import TimeStampedModel
 
 from accounts.models import UserProfile
 
+# 다른 구현방법 parent, children foreignkey
 
 class Comment(MP_Node, TimeStampedModel):
     """
@@ -27,6 +28,7 @@ class Comment(MP_Node, TimeStampedModel):
     steplen = 8
 
     # profile이 삭제되면 그 profile이 작성한 게시물도 없어져야 한다.
+    # Todo: Model Manager로 depth가 2이상인 진짜 comment만 가져오자, field를 추가해서 데이터분석하시는 분들이 읽기 편하게 하자.
     profile = models.ForeignKey(
         UserProfile,
         on_delete=models.CASCADE

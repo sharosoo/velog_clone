@@ -3,10 +3,11 @@ from django_extensions.db.models import TimeStampedModel
 
 from likes.models import Like
 from articleviews.models import ArticleViewCount
-from recommends.basemanager import RecommendUpdateBaseManager
+from recommends.managers import RecommendUpdateBaseManager
 
 
 class RecommendUpdateMonthlyManager(RecommendUpdateBaseManager):
+
     def get_article_like_cnt(self, article):
         return Like.period.monthly(article_id=article).count()
 
@@ -15,6 +16,7 @@ class RecommendUpdateMonthlyManager(RecommendUpdateBaseManager):
 
 
 class RecommendUpdateWeeklyManager(RecommendUpdateBaseManager):
+
     def get_article_like_cnt(self, article):
         return Like.period.weekly(article_id=article).count()
 
@@ -23,6 +25,7 @@ class RecommendUpdateWeeklyManager(RecommendUpdateBaseManager):
 
 
 class RecommendUpdateTodayManager(RecommendUpdateBaseManager):
+
     def get_article_like_cnt(self, article):
         return Like.period.today(article_id=article).count()
 
@@ -44,10 +47,6 @@ class Recommend(TimeStampedModel):
     )
 
     objects = models.Manager()
-    assigned_to = RecommendUpdateBaseManager()
-
-    def get_class_name(self):
-        return self.__class__.__name__
 
     class Meta:
         abstract = True
@@ -60,14 +59,14 @@ class Recommend(TimeStampedModel):
 
 class RecommendToday(Recommend):
 
-    assigned_to = RecommendUpdateTodayManager()
+    assigned_to = RecommendUpdateTodayManager
 
 
 class RecommendWeekly(Recommend):
 
-    assigned_to = RecommendUpdateWeeklyManager()
+    assigned_to = RecommendUpdateWeeklyManager
 
 
 class RecommendMonthly(Recommend):
 
-    assigned_to = RecommendUpdateMonthlyManager()
+    assigned_to = RecommendUpdateMonthlyManager

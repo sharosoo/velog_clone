@@ -81,9 +81,9 @@ class LikeTestCase(TestCase):
             Like.objects.create(profile=self.profile_today, article=self.article)
 
     def test_like_period_query(self):
-        self.assertEqual(Like.period.today_cnt(article_id=self.article), 1)
-        self.assertEqual(Like.period.weekly_cnt(article_id=self.article), 2)
-        self.assertEqual(Like.period.monthly_cnt(article_id=self.article), 3)
+        self.assertEqual(Like.period.today(article_id=self.article).count(), 1)
+        self.assertEqual(Like.period.weekly(article_id=self.article).count(), 2)
+        self.assertEqual(Like.period.monthly(article_id=self.article).count(), 3)
 
     def tearDown(self):
         self.freezer.stop()

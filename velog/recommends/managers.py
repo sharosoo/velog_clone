@@ -2,7 +2,6 @@ from django.db import models
 
 
 class RecommendUpdateBaseManager(models.Manager):
-
     def get_queryset(self, article):
         return super().get_queryset().filter(
             article=article

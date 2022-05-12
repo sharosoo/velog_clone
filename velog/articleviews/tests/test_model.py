@@ -62,9 +62,9 @@ class ArticleViewCountTestCase(TestCase):
         self.assertEqual(self.view_today.article, self.article)
 
     def test_article_view_period_query(self):
-        self.assertEqual(ArticleViewCount.period.today_cnt(article_id=self.article.id), 1)
-        self.assertEqual(ArticleViewCount.period.weekly_cnt(article_id=self.article.id), 2)
-        self.assertEqual(ArticleViewCount.period.monthly_cnt(article_id=self.article.id), 3)
+        self.assertEqual(ArticleViewCount.period.today(article_id=self.article.id).count(), 1)
+        self.assertEqual(ArticleViewCount.period.weekly(article_id=self.article.id).count(), 2)
+        self.assertEqual(ArticleViewCount.period.monthly(article_id=self.article.id).count(), 3)
 
     def test_article의_view_cnt값이_올바르게_생성됨(self):
         self.assertEqual(self.article.view_cnt, 3)

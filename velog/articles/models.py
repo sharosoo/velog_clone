@@ -128,7 +128,7 @@ class Article(TimeStampedModel):
         self.get_series_order()
 
         super(Article, self).save(**kwargs)
-        self.update_article_recommend()
+        # self.update_article_recommend()
 
     def delete(self, using=None, keep_parents=False):
         if self.comment:
@@ -154,13 +154,13 @@ class Article(TimeStampedModel):
         self.update_article_recommend_monthly()
 
     def update_article_recommend_today(self):
-        RecommendToday.assigned_to().update_article_recommend(self)
+        RecommendToday.assigned_to().update_article_recommend(article=self)
 
     def update_article_recommend_weekly(self):
-        RecommendWeekly.assigned_to().update_article_recommend(self)
+        RecommendWeekly.assigned_to().update_article_recommend(article=self)
 
     def update_article_recommend_monthly(self):
-        RecommendMonthly.assigned_to().update_article_recommend(self)
+        RecommendMonthly.assigned_to().update_article_recommend(article=self)
 
 
 

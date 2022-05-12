@@ -12,10 +12,17 @@ ROOT_NODE_COMMENT = '루트 노드 댓글입니다.'
 
 class Comment(MP_Node, TimeStampedModel):
     """
-    댓글, 대댓글을 관리하기 위한 tree 구조의 댓글 model
-    depth 제한 : 30 ( 31 (255/8) - 1 (root) )
-    사이트에서 허용 가능한 총 (root) 댓글 수 (게시물 수와 동일) : 10 ** 12
-    게시물당 허용 가능한 댓글 수 : 10 ** 12
+    1. 정의
+        게시물에 달릴 댓글, 대댓글 model
+    2. 구현형태
+        tree 구조의 댓글 model
+
+        depth 제한 : 30 ( 31 (255/8) - 1 (root) )
+        사이트에서 허용 가능한 총 (root) 댓글 수 (게시물 수와 동일) : 10 ** 12
+        게시물당 허용 가능한 댓글 수 : 10 ** 12
+    3. 참고사항
+        depth=1인 경우 댓글 tree를 관리하기 위한 게시물당 부여되는 가짜 댓글이다.
+        active_objects로 쿼리하면 가짜 댓글은 보여주지 않는다.
     """
     # article마다 root 댓글을 하나 생성후 article에서 root 댓글을 foreign key로 가진다.
     # 그 아래에 모든 댓글을 트리 형태로 관리한다.

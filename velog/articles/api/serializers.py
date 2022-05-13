@@ -30,3 +30,19 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
             'root_comment',
             'comments',
         ]
+
+
+class ArticleListSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Article
+
+        fields = [
+            'pk',
+            'title',
+            'author',
+            'created',
+            'view_cnt',
+        ]
+

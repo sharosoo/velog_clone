@@ -28,7 +28,7 @@ class CommentTestCase(TestCase):
             content="It's test"
         )
 
-        self.first_comment = self.article.comment.add_child(
+        self.first_comment = self.article.root_comment.add_child(
             profile=self.profile,
             content='첫번째 댓글입니다.'
         )
@@ -77,7 +77,7 @@ class CommentTestCase(TestCase):
         self.assertNotEqual(child_node.content, REMOVED_COMMENT)
 
     def test_root_node삭제시_모든_comment가_삭제됨(self):
-        self.article.comment.delete()
+        self.article.root_comment.delete()
         self.assertFalse(Comment.objects.all().exists())
 
     def test_leaf_node삭제시_삭제되어야함(self):

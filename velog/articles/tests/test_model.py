@@ -71,19 +71,19 @@ class ArticleTestCase(TestCase):
         self.assertEqual(self.article.created, self.expected_time)
 
     def test_article_생성시_root_comment도_생성됨(self):
-        self.assertTrue(self.article.comment)
-        self.assertEqual(self.article.comment.depth, 1)
-        self.assertEqual(self.article.comment.content, ROOT_NODE_COMMENT)
+        self.assertTrue(self.article.root_comment)
+        self.assertEqual(self.article.root_comment.depth, 1)
+        self.assertEqual(self.article.root_comment.content, ROOT_NODE_COMMENT)
 
-        self.assertEqual(self.article.comment.created, self.expected_time)
+        self.assertEqual(self.article.root_comment.created, self.expected_time)
 
     def test_article_생성시_root_comment의_active가_False여야함(self):
-        self.assertFalse(self.article.comment.active)
+        self.assertFalse(self.article.root_comment.active)
 
     def test_article_삭제시_root_comment도_삭제됨(self):
         article_pk = self.article.pk
 
-        comment = self.article.comment
+        comment = self.article.root_comment
         comment_pk = comment.pk
 
         self.article.delete()

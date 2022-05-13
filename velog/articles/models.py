@@ -86,6 +86,7 @@ class Article(TimeStampedModel):
 
     # article에 달린 comment(트리구조)의 root를 가리킨다.
     comment = models.ForeignKey(
+    root_comment = models.ForeignKey(
         Comment,
         # 게시물이 삭제되기 전에 root 댓글(가짜 댓글)이 삭제될 일은 없다.
         # 그래도 article이 삭제 되면 위험하니 SET_NULL로 하자.
@@ -149,7 +150,7 @@ class Article(TimeStampedModel):
         return self.get_related_comments().values()
 
     def get_related_comments(self):
-        return self.comment.get_descendants()
+        return self.root_comment.get_descendants()
 
     def get_series_order(self):
         if self.series:

@@ -13,7 +13,7 @@ class TestCommentSerializer(TestCase):
     def setUp(self):
         self.profile = get_profiles(1)[0]
         self.article = get_articles(self.profile, 1)[0]
-        self.root_comment = self.article.comment
+        self.root_comment = self.article.root_comment
         self.first_comment = self.root_comment.add_child(
             profile=self.profile,
             content='first comment'

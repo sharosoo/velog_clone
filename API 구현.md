@@ -42,7 +42,6 @@
     - JSON Data: `profile_id`, `title`
 - `api/series/{int: series_id}`
   - `GET`
-    - JSON Data: `profile_id`, `title`
   - `PUT`
     - JSON Data: `profile_id`, `title`
   - `DELETE`

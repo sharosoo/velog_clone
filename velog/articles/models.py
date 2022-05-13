@@ -11,6 +11,7 @@ from django_extensions.db.models import TimeStampedModel
 from series.models import Series
 from comments.models import Comment
 from recommends.models import RecommendToday, RecommendWeekly, RecommendMonthly
+from tags.models import Tag
 
 
 class Article(TimeStampedModel):
@@ -163,6 +164,16 @@ class Article(TimeStampedModel):
 
     def get_related_comments(self):
         return self.root_comment.get_descendants()
+
+    @cached_property
+    def get_related_tags_dict(self):
+        related_tags = self.get_related_tags().annotate(
+            tag=F('hashtag')
+        ).values('tag')
+        return json.dumps(list(related_tags), cls=DjangoJSONEncoder)
+
+    def get_related_tags(self):
+        return Tag.objects.filter(article=self)
 
     def get_series_order(self):
         if self.series:

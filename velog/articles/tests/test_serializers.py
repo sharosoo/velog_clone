@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 
+from tags.models import Tag
 from ..api.serializers import ArticleDetailSerializer
 from commons.test import (
     get_profiles, drf_strftime,
@@ -37,6 +38,15 @@ class TestArticleDetailSerializer(TestCase):
             content='first com comment'
         )
 
+        self.first_tag = Tag.objects.create(
+            hashtag='test1'
+        )
+        self.second_tag = Tag.objects.create(
+            hashtag='test2'
+        )
+
+        self.test_article.tags.add(self.first_tag, self.second_tag)
+
         self.expected_serializer_data = {
             "profile": 1,
             "title": self.test_article.title,
@@ -69,6 +79,7 @@ class TestArticleDetailSerializer(TestCase):
         self.assertEqual(serializer.data["like_cnt"], 0)
         self.assertEqual(serializer.data["root_comment"], self.root_comment.pk)
         self.assertEqual(serializer.data["comments"], self.comments_dict)
+        self.assertEqual(serializer.data["tags"], [1, 2])
 
 
 

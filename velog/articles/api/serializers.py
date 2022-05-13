@@ -7,10 +7,7 @@ from ..models import Article
 
 class ArticleDetailSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField()
-    # comments = serializers.ReadOnlyField(source='get_related_comments_dict')
     comments = serializers.JSONField(source='get_related_comments_dict', read_only=True)
-    # implement TagSerializer
-    # append series
 
     class Meta:
         model = Article
@@ -28,4 +25,5 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
             'series_order',
             'root_comment',
             'comments',
+            'tags'
         ]

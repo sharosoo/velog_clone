@@ -1,7 +1,5 @@
 from django.db import models
 
-from articles.models import Article
-
 
 class Tag(models.Model):
     """
@@ -13,7 +11,7 @@ class Tag(models.Model):
         verbose_name='태그명'
     )
     article = models.ManyToManyField(
-        Article,
+        'articles.Article',
         related_name='tags',
         verbose_name='게시물'
     )

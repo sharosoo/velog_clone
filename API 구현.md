@@ -11,9 +11,9 @@
 - `api/articles/search/?{querystring}`
   - `GET`
   - `tag` or `keyword`
-- `api/articles/{int: profile_id}/`
+- `api/articles/?{profile_id}/`
   - `GET`
-- `api/articles/{int: series_id}/`
+- `api/articles/?{series_id}/`
   - `GET`
 
 - Data

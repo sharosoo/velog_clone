@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
 
-import articles.api.views
+from articles.api.views import ArticleDetailView
+from likes.views import LikeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/article/', articles.api.views.ArticleCreateView.as_view())
+    path('api/article/', ArticleDetailView.as_view()),
+    path('api/article/like/', LikeView.as_view()),
+    path('api/article/<int:article_id>/', ArticleDetailView.as_view()),
 ]

@@ -10,6 +10,9 @@ from django_extensions.db.models import TimeStampedModel
 
 # Todo: DRY 원칙에 위배됨 like의 PeriodQuerySet과 함께 쓸 수 있도록 리팩토링하자.
 class PeriodQuerySet(models.QuerySet):
+    """
+    기간에 따른 게시물의 조회수를 쿼리하기 위함
+    """
 
     def _period_base(self, article_id=None, time_delta=None):
         if not time_delta:

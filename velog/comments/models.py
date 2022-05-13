@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.functional import cached_property
 
 from treebeard.mp_tree import MP_Node
 from django_extensions.db.models import TimeStampedModel
@@ -54,6 +55,13 @@ class Comment(MP_Node, TimeStampedModel):
         default=True,
         verbose_name='댓글 활성 상태'
     )
+
+    @cached_property
+    def author(self):
+        return self.get_author()
+
+    def get_author(self):
+        return self.profile.nickname
 
     def is_root_comment(self):
         return bool(self.depth == 1)

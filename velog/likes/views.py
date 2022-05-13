@@ -15,12 +15,7 @@ class LikeView(APIView):
 
         article_id = request.data.get('article_id', 0)
 
-        article_instance = get_object_or_404(
-            Article,
-            id=article_id
-        )
-
-        if profile_id := request.data.get('profile_id', 0) is False:
+        if (profile_id := request.data.get('profile_id', 0)) is False:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         try:
@@ -32,4 +27,24 @@ class LikeView(APIView):
         except IntegrityError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+class UnlikeView(APIView):
 
+    def post(self, request, *args, **kwargs):
+
+        article_id = request.data.get('article_id', 0)
+
+        if (profile_id := request.data.get('profile_id', 0)) is False:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        like_instance = get_object_or_404(
+            Like,
+            profile_id=profile_id,
+            article_id=article_id
+        )
+
+        try:
+            like_instance.delete()
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

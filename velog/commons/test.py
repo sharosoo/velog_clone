@@ -1,6 +1,7 @@
 import uuid
 
 from dateutil.relativedelta import relativedelta
+from django.conf import settings
 from django.utils import timezone
 
 
@@ -56,3 +57,6 @@ def get_articles(profile, iteration):
         articles.append(article)
 
     return articles
+
+def drf_strftime(obj):
+    return obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")

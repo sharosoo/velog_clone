@@ -45,7 +45,6 @@
     - JSON Data: `profile_id`, `title`
   - `DELETE`
     - JSON Data: `profile_id`
-    - series아래의 article들은 profile 밑에 붙이고 나서 series만 삭제한다.
 - `api/series/add`
   - `POST`
     - JSON Data: `profile_id`, `series_id`, `article_id`

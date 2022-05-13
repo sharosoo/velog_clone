@@ -50,6 +50,7 @@ class Comment(MP_Node, TimeStampedModel):
 
     active = models.BooleanField(
         blank=True,
+        editable=False,
         default=True,
         verbose_name='댓글 활성 상태'
     )

@@ -1,3 +1,4 @@
+from django.core import serializers
 from django.db import models
 from django.db.models import Max
 from django.utils.functional import cached_property
@@ -49,6 +50,7 @@ class Article(TimeStampedModel):
     # 꼭 필요한 필드는 아니지만 page마다 빈번하게 조회되는 쿼리이므로 반정규화했다.
     view_cnt = models.PositiveIntegerField(
         blank=True,
+        editable=False,
         default=0,
         verbose_name='조회수'
     )
@@ -58,6 +60,7 @@ class Article(TimeStampedModel):
     # 꼭 필요한 필드 아니지만 page마다 빈번하게 조회되는 쿼리이므로 반정규화했다.
     like_cnt = models.PositiveIntegerField(
         blank=True,
+        editable=False,
         default=0,
         verbose_name='좋아요수'
     )
@@ -66,6 +69,7 @@ class Article(TimeStampedModel):
     # Todo: 노출순서 설정 더 고민해보기, Manager로 잘 감싸자
     series_order = models.PositiveIntegerField(
         blank=True,
+        editable=False,
         default=0,
         verbose_name='시리즈 순서'
     )
@@ -138,6 +142,14 @@ class Article(TimeStampedModel):
     def get_root_comment(self):
         if not self.comment:
             self.comment = Comment.add_root(profile=self.profile, active=False)
+        return self.comment
+
+    @cached_property
+    def get_related_comments_dict(self):
+        return self.get_related_comments().values()
+
+    def get_related_comments(self):
+        return self.comment.get_descendants()
 
     def get_series_order(self):
         if self.series:

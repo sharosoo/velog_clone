@@ -1,6 +1,9 @@
+import json
+
 from django.core import serializers
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, F
 from django.utils.functional import cached_property
 
 from django_extensions.db.models import TimeStampedModel
@@ -85,7 +88,6 @@ class Article(TimeStampedModel):
     )
 
     # article에 달린 comment(트리구조)의 root를 가리킨다.
-    comment = models.ForeignKey(
     root_comment = models.ForeignKey(
         Comment,
         # 게시물이 삭제되기 전에 root 댓글(가짜 댓글)이 삭제될 일은 없다.
@@ -136,18 +138,28 @@ class Article(TimeStampedModel):
         self.update_article_recommend()
 
     def delete(self, using=None, keep_parents=False):
-        if self.comment:
-            self.comment.delete()
+        if self.root_comment:
+            self.root_comment.delete()
         super(Article, self).delete()
 
     def get_root_comment(self):
-        if not self.comment:
-            self.comment = Comment.add_root(profile=self.profile, active=False)
-        return self.comment
+        if not self.root_comment:
+            self.root_comment = Comment.add_root(profile=self.profile, active=False)
+        return self.root_comment
 
     @cached_property
     def get_related_comments_dict(self):
-        return self.get_related_comments().values()
+        related_comments = self.get_related_comments().annotate(
+            author=F('profile__nickname')
+        ).values_list(
+            'author',
+            'profile',
+            'content',
+            'depth',
+            'created',
+            'modified'
+        )
+        return json.dumps(list(related_comments), cls=DjangoJSONEncoder)
 
     def get_related_comments(self):
         return self.root_comment.get_descendants()

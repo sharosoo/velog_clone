@@ -51,7 +51,8 @@
   - `POST`
     - JSON Data: `profile_id`, `series_id`, `article_id`
   - `DELETE`
-    - JSON Data: `profile_id`, `series_id`, `article_id`
+    - JSON Data: `profile_id`, `article_id`
+    - article의 series를 null처리
 
 
 

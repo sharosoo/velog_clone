@@ -10,6 +10,9 @@ from recommends.managers import (
 
 
 class Recommend(TimeStampedModel):
+    """
+    일간, 주간, 월간 게시물 추천을 위한 base model
+    """
 
     article = models.OneToOneField(
         'articles.Article',
@@ -34,15 +37,24 @@ class Recommend(TimeStampedModel):
 
 
 class RecommendToday(Recommend):
+    """
+    일간 게시물 추천 리스트
+    """
 
     assigned_to = RecommendUpdateTodayManager()
 
 
 class RecommendWeekly(Recommend):
+    """
+    주간 게시물 추천 리스트
+    """
 
     assigned_to = RecommendUpdateWeeklyManager()
 
 
 class RecommendMonthly(Recommend):
+    """
+    월간 게시물 추천 리스트
+    """
 
     assigned_to = RecommendUpdateMonthlyManager()

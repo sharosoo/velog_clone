@@ -9,6 +9,9 @@ from django_extensions.db.models import TimeStampedModel
 
 
 class PeriodQuerySet(models.QuerySet):
+    """
+    기간에 따른 게시물의 좋아요 수를 구하기 위한 쿼리셋
+    """
     def _period_base(self, article_id=None, time_delta=None):
         if not time_delta:
             time_delta = timedelta(0)

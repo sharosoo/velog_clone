@@ -58,5 +58,10 @@ def get_articles(profile, iteration):
 
     return articles
 
+
 def drf_strftime(obj):
     return obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+
+
+def nested_drf_strftime(obj):
+    return drf_strftime(obj)[:-4] + 'Z'
